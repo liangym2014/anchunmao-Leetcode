@@ -1,4 +1,6 @@
+/*
 https://leetcode.com/problems/swapping-nodes-in-a-linked-list/
+*/
 
 /**
  * Definition for singly-linked list.
@@ -10,6 +12,9 @@ https://leetcode.com/problems/swapping-nodes-in-a-linked-list/
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+#include <algorithm>
+using namespace std;
+
 class Solution {
 public:
     ListNode* swapNodes(ListNode* head, int k) {
