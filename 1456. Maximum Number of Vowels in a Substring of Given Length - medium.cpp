@@ -4,20 +4,19 @@ class Solution {
 public:
     int maxVowels(string s, int k) {
         int l = 0, i = 0, count = 0;
-        string vowels("aeiou");
         
         for(i = 0; i < k; i ++){
-            if(vowels.find(s[i]) != string::npos)
+            if(s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u')
                 count ++;
         }
         
         int ans = count;
         
-        for(i = k; i < s.size(); i ++){
-            if(vowels.find(s[l ++]) != string::npos)
+        for(i = k; i < s.size(); i ++, l ++){
+            if(s[l] == 'a' || s[l] == 'e' || s[l] == 'i' || s[l] == 'o' || s[l] == 'u')
                 count --;
             
-            if(vowels.find(s[i]) != string::npos){
+            if(s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u'){
                 count ++;
                 ans = max(ans, count);
             }
