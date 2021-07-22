@@ -10,36 +10,36 @@ public:
         if(n == 2)
             return 0;
         
-        vector<int> oddSum(n), evenSum(n);
-        oddSum[1] = nums[1];
-        evenSum[0] = nums[0];
-        evenSum[1] = nums[0];
+        vector<int> sum(n);
+        sum[0] = nums[0];
+        sum[1] = nums[1];
         
-        for(int i = 2; i < n; i ++){
-            if(i & 1){
-                oddSum[i] = oddSum[i - 1] + nums[i];
-                evenSum[i] = evenSum[i - 1];
-            }
-            else{
-                oddSum[i] = oddSum[i - 1];
-                evenSum[i] = evenSum[i - 1] + nums[i];                
-            }
-        }
+        for(int i = 2; i < n; i ++)
+            sum[i] = sum[i - 2] + nums[i];
+
+        int oddSum = sum.back(), evenSum = sum[n - 2];
         
+        if(n & 1)
+            swap(oddSum, evenSum);
+
         int ans = 0, odd_index, even_index;
         
         // for index 0
-        ans += (oddSum[n-1] == (evenSum[n-1] - evenSum[0]));
+        ans += (oddSum == (evenSum - sum[0]));
 
+        // for index 1
+        odd_index = evenSum - sum[0];
+        even_index = sum[0] + oddSum - sum[1];
+        ans += (odd_index == even_index);
 
-        for(int i = 1; i < n; i ++){
+        for(int i = 2; i < n; i ++){
             if(i & 1){
-                odd_index = oddSum[i - 1] + evenSum[n - 1] - evenSum[i - 1];
-                even_index = evenSum[i - 1] + oddSum[n - 1] - oddSum[i];
+                odd_index = sum[i - 2] + evenSum - sum[i - 1];
+                even_index = sum[i - 1] + oddSum - sum[i];
             }
             else{
-                odd_index = oddSum[i - 1] + evenSum[n - 1] - evenSum[i];
-                even_index = evenSum[i - 2] + oddSum[n - 1] - oddSum[i - 1];
+                odd_index = sum[i - 1] + evenSum - sum[i];
+                even_index = sum[i - 2] + oddSum - sum[i - 1];
             }
             ans += (odd_index == even_index);
         }                    
