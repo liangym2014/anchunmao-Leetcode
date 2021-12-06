@@ -1,28 +1,25 @@
 # https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/
 class Solution:
     def minimumDeletions(self, s: str) -> int:
-        count_a, count_b = 0, 0  # number of 'a' or 'b' in s[0:i]
-        
-        # remove_a: the number of deletions of 'a' to make s[0:i] balanced
-        # remove_b: the number of deletions of 'b' to make s[0:i] balanced
-        remove_a, remove_b = 0, 0
+        # end_a: the number of deletions to make s[0:i] ending with 'a' balanced
+        # end_b: the number of deletions to make s[0:i] ending with 'b' balanced
+        end_a, end_b = 0, 0
         
         for c in s:
             if c == 'a':
-                count_a += 1
-                
-                # if end with 'b': besides all the 'a' that need to be remove in previous section, also remove current 'a'
-                remove_a += 1               
-                # if end with 'a', must remove any 'b' on the left
-                remove_b = count_b
+            # to make s[0:i + 1] end with 'a' <==> s[0:i + 1] = (prev ending with 'a') + 'a'.
+            # end_a doesn't need to change.
+            
+            # to make s[0:i + 1] end with 'b' <==>  s[0:i + 1] = (prev ending with 'b') + 'a'.
+            # need to delete the current 'a' plus all the deletions end_b required ==> end_b = end_b + 1                
+                end_b += 1
             else:
-                count_b += 1
-                
-                # suppose the section on the left of c is already balanced, then letting s[0:i] + c end with 'b', 
-                # will always require less deletions than it ending with 'a', since the last character of 'b' doesn't
-                # need to be removed.
-                # for the section of s[0:i], would require at least min(remove_a, remove_b) deletions to become balanced
-                remove_a = min(remove_a, remove_b)
-
+            # to make s[0:i + 1] end with 'b' <==> s[0:i + 1] = prev + 'b'
+            # choose the minimum deletions prev requires to become balanced ==> end_b = min(end_a, end_b)
+            
+            # to make s[0:i + 1] end with 'a' <==> s[0:i + 1] = (prev ending with 'a') + 'b'.
+            # need to delete the current 'b' plus all the deletions end_a required ==> end_a = end_a + 1.            
+                end_b = min(end_a, end_b)
+                end_a += 1                
         
-        return min(remove_a, remove_b)
+        return min(end_a, end_b)
