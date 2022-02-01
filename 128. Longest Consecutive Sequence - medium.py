@@ -1,4 +1,36 @@
 # https://leetcode.com/problems/longest-consecutive-sequence/
+
+# solution 2:
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        m = defaultdict(int)
+        nums = set(nums)
+        
+        for num in nums:
+            prev = num - 1
+            nxt = num + 1
+            
+            if prev not in nums and nxt not in nums:
+                m[num] = 1
+            elif prev not in nums:
+                val = 1 + m[nxt]
+                m[num] = val
+                m[m[nxt] + nxt - 1] = val
+            elif nxt not in nums:
+                val = 1 + m[prev]
+                m[num] = val
+                m[prev + 1 - m[prev]] = val
+            else:
+                val = 1 + m[prev] + m[nxt]
+                m[num] = val
+                m[prev + 1 - m[prev]] = val
+                m[m[nxt] + nxt - 1] = val
+                
+        return max(m.values())
+    
+# solution 1: not good enough
 class Union_find:
     def __init__(self):
         self.group = []
